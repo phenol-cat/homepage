@@ -11,8 +11,9 @@
   // 视图导入
   import MyProjects from './views/MyProjects.vue'
   import MyArticles from './views/MyArticles.vue'
-  import MySocials from './views/MySocials.vue'
   import WelcomePage from './views/WelcomePage.vue'
+  import AboutMe from './views/AboutMe.vue'
+  import MyFriends from './views/MyFriends.vue'
 
   // 图片资源导入
   // 确保 assets 文件夹里有这两个文件
@@ -43,13 +44,14 @@
      4. 标签页切换逻辑 (Tab Switching)
      ========================================= */
   const tabs = {
+    'about': AboutMe,
     'projects': MyProjects,
     'articles': MyArticles,
-    'socials':  MySocials
+    'friends':  MyFriends
   }
 
-  const currentTabId = ref('projects')
-  const currentView = shallowRef(MyProjects)
+  const currentTabId = ref('about')
+  const currentView = shallowRef(AboutMe)
 
   function switchTab(id) {
     currentTabId.value = id
@@ -200,9 +202,8 @@ body {
 overflow-y: auto;
 padding: 50px;
  box-sizing: border-box;
- /* 👇 新增：针对 Firefox 隐藏滚动条 */
+ /* 隐藏滚动条 */
 scrollbar-width: none; 
-  /* 👇 新增：针对 IE 10+ 隐藏滚动条 */
 -ms-overflow-style: none;
 }
 .scroll-container::-webkit-scrollbar { width: 8px; }

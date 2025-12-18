@@ -8,9 +8,10 @@
   const emit = defineEmits(['change-tab'])
 
   const menuItems = [
-    { id: 'projects', label: '🛠️ 项目展示' },
-    { id: 'articles', label: '📚 学习笔记' },
-    { id: 'socials',  label: '📺 B站 / GitHub' },
+    { id: 'about' ,   label: '🍭 关于我' },
+    { id: 'projects', label: '🍔 项目展示' },
+    { id: 'articles', label: '🍖 学习笔记' },
+    { id: 'friends',  label: '💕 友情链接'}
   ]
 </script>
 

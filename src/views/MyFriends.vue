@@ -45,6 +45,12 @@ const friendsList = ref([
     intro: "Stay hungry, stay foolish.",
     link: "https://selflo06.xyz/"
   },
+  {
+    name:"Runnel",
+    avatar:"/homepage/images/Runnel_avatar.jpg",
+    intro:"Il nous montre une correspondance subtiles et fine， comme venue du vide.",
+    link:"https://www.runnelzhang.com/"
+  },
   // ... 其他朋友
 ])
 </script>

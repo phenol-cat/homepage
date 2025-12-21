@@ -14,8 +14,8 @@ tags: ["C++", "QT", "CMake"]
 ## 2. 效果展示
 实际上就是粗糙的贴图平移，技术力就到这了，毕竟我只是个期末赶作业的大学生。  
 一共就三个界面:
-<img src="public\images\towerDefence_image1.png" width=50%>  
-<img src="public\images\towerDefence_image2.png" width=50%>
+<img src="/images/towerDefence_image1.png" width=50%>  
+<img src="/images/towerDefence_image2.png" width=50%>
 <video 
   src="/videos/towerDefence_vedio1.mp4" 
   width="100%" 

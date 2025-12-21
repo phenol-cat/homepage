@@ -24,7 +24,7 @@ desc: "使用QT作为图形库，纯C++语言编写的一个二维平面格斗�
 </video>
 组员比较多，而且组长大人超级卖力，内容量作为一个作业来说算相当丰富了！
 
-<img src="/public/images/fightGame_image1.png"  width=50%>  
+<img src="/images/fightGame_image1.png"  width=50%>  
 
 每个角色都DIY了自己的技能，有不同的攻击方式，动画精美，制作优良，平衡性也完全找不到人一起玩（  
 （其实这里本来是想搞一个试玩视频的，但是实在找不到人一起玩QAQ）  

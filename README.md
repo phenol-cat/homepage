@@ -8,7 +8,7 @@
 
 ## 📸 预览 (Screenshots)
 
-*(建议：请在这里放一张你网站的截图，保存在 public/images/ 目录下，然后取消下面的注释)*
+<img src="homepage/images/homepage.png">
 
 ## ✨ 特性 (Features)
 
@@ -106,10 +106,3 @@ sh deploy.sh
 **© 2025 三硝基猫猫酚** | Made with ❤️ and Vue.js
 
 ---
-
-### 💡 给你的小建议：
-
-1. **截图**：README 里最吸引人的就是图。你刚才不是正好在学“沉浸模式”吗？打开沉浸模式，截一张好看的背景图，再截一张普通模式和夜间模式的图。
-2. **放置图片**：把截图放在 `public/images/` 里（比如叫 `preview.png`），然后在 README 里把 `这行的注释符号` 去掉，文件名改对即可。
-
-快去给你的项目贴上这个漂亮的“说明书”吧！🎉

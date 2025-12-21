@@ -34,14 +34,14 @@ function handleCardClick(e, friend) {
 const friendsList = ref([
   {
     name: "三硝基猫猫酚",
-    avatar: "/images/avatar.png", 
+    avatar: "/homepage/images/avatar.png", 
     intro: "实在没东西放，就把我自己放上来吧，不要原地TP！",
     link: "#", // 既然是彩蛋，这里链接可以随便写，反正会被拦截
     isMe: true // 👈 ⭐ 关键标记！一定要加上这个！
   },
   {
     name: "SelfLo",
-    avatar: "/images/selflo_avatar.png",
+    avatar: "/homepage/images/selflo_avatar.png",
     intro: "Stay hungry, stay foolish.",
     link: "https://selflo06.xyz/"
   },

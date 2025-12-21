@@ -2,7 +2,7 @@
 id: 2
 title: "C++平面格斗小游戏"
 date: "2025-10"
-image: "/images/fightGame.png"
+image: "/homepage/images/fightGame.png"
 tags: ["C++", "QT","CMake"]
 desc: "使用QT作为图形库，纯C++语言编写的一个二维平面格斗小游戏"
 ---

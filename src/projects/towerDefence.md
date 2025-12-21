@@ -2,7 +2,7 @@
 id: 0
 title: "C++塔防小游戏"
 date: "2025-6"
-image: "/images/towerDefence_image1.png"
+image: "/homepage/images/towerDefence_image1.png"
 desc: "一个很简陋的图片平移塔防小游戏（算不算游戏存疑，我实际上没做出来能玩的关卡，只做出来了基本框架，bydDDL提前了一周）"
 tags: ["C++", "QT", "CMake"]
 ---

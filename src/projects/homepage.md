@@ -2,7 +2,7 @@
 id: 3
 title: "Vue制作的个人主页"
 date: "2025-12"
-image: "/images/homepage.png"
+image: "/homepage/images/homepage.png"
 desc: "实在没项目写，被迫原地TP。"
 tags: ["Vue", "HTML", "JavaScript","CSS","假装不知道其实可以只用一个Vue概括从而显得高大上","markdown"]
 ---

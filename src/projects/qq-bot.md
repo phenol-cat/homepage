@@ -2,7 +2,7 @@
 id: 1
 title: "QQ Bot 插件系统"
 date: "2025-11"
-image: "/images/bot.png"
+image: "/homepage/images/bot.png"
 tags: ["Python", "Napcat","WebSocket"]
 desc: "基于 Python 的 QQ 机器人插件，实现了自动回复与定时发送指定图片，好感度对话等功能。"
 ---

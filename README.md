@@ -8,7 +8,7 @@
 
 ## 📸 预览 (Screenshots)
 
-<img src="homepage/images/homepage.png">
+<img src="images/homepage.png">
 
 ## ✨ 特性 (Features)
 

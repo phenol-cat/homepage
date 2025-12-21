@@ -75,6 +75,9 @@ const closeArticle = () => selectedArticle.value = null
 </template>
 
 <style scoped>
+/* =========================================
+   1. 基础布局
+   ========================================= */
 .articles-container {
   width: 100%;
   height: 100%;
@@ -83,23 +86,30 @@ const closeArticle = () => selectedArticle.value = null
   padding-top: 10px;
 }
 
-/* 列表布局：垂直排列，带间距 */
+/* 列表布局 */
 .article-list {
   display: flex;
   flex-direction: column;
-  gap: 20px; /* 卡片之间的距离 */
+  gap: 20px;
   padding-bottom: 50px;
-  max-width: 900px; /* 限制列表最大宽度，太宽了不好看 */
-  margin: 0 auto;   /* 居中 */
+  max-width: 900px;
+  margin: 0 auto;
   width: 100%;
 }
 
-.empty-tip { text-align: center; color: #fff; margin-top: 50px; }
+.empty-tip { 
+  text-align: center; 
+  /* 颜色变量化 */
+  color: var(--text-secondary); 
+  margin-top: 50px; 
+}
 
-/* 详情页样式 */
+/* =========================================
+   2. 详情页样式
+   ========================================= */
 .article-detail {
   width: 100%;
-  max-width: 800px; /* 文章详情页稍微窄一点，利于阅读 */
+  max-width: 800px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -109,64 +119,141 @@ const closeArticle = () => selectedArticle.value = null
 .back-btn {
   align-self: flex-start;
   margin-bottom: 20px;
-  background: rgba(255,255,255,0.2);
+  /* 背景换成玻璃边框色 (半透明白) */
+  background: var(--glass-border); 
   border: none;
   padding: 8px 16px;
   border-radius: 8px;
-  color: #fff;
+  /* 文字颜色变量化 */
+  color: var(--text-primary);
   cursor: pointer;
   transition: all 0.3s;
 }
-.back-btn:hover { background: #42b883; }
 
-/* 仿纸张效果的容器 */
-.paper-content {
-  background: rgba(255, 255, 255, 0.9);
-  padding: 50px;
-  border-radius: 12px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-  color: #333;
+.back-btn:hover { 
+  /* 悬停高亮 */
+  background: var(--text-highlight); 
+  color: #fff;
 }
 
-.article-header h1 { margin: 0 0 15px 0; font-size: 2.2rem; color: #2c3e50; }
-.meta { color: #888; font-size: 0.9rem; display: flex; gap: 20px; }
-.divider { border: 0; height: 1px; background: #eee; margin: 30px 0; }
+/* ⭐ 核心：仿纸张/玻璃容器 */
+.paper-content {
+  /* ❌ 原来是: background: rgba(255, 255, 255, 0.9); */
+  /* ✅ 改为: 玻璃背景变量 (白天白，晚上黑) */
+  background: var(--glass-bg);
+  
+  /* 加上边框，让夜间模式轮廓更清晰 */
+  border: 1px solid var(--glass-border);
+  
+  padding: 50px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px var(--glass-shadow);
+  
+  /* 文字颜色变量化 */
+  color: var(--text-primary);
+  
+  /* 添加过渡，切换时不生硬 */
+  transition: all 0.3s ease;
+}
 
-/* 动画 */
+.article-header h1 { 
+  margin: 0 0 15px 0; 
+  font-size: 2.2rem; 
+  color: var(--text-primary); /* 变量 */
+}
+
+.meta { 
+  color: var(--text-secondary); /* 变量 */
+  font-size: 0.9rem; 
+  display: flex; 
+  gap: 20px; 
+}
+
+.divider { 
+  border: 0; 
+  height: 1px; 
+  /* 分割线变量 */
+  background: var(--glass-border); 
+  margin: 30px 0; 
+}
+
+/* =========================================
+   3. 动画 (保持不变)
+   ========================================= */
 .fade-slide-enter-active, .fade-slide-leave-active { transition: all 0.4s ease; }
-.fade-slide-enter-from { opacity: 0; transform: translateY(20px); } /* 垂直位移 */
+.fade-slide-enter-from { opacity: 0; transform: translateY(20px); }
 .fade-slide-leave-to { opacity: 0; transform: translateY(-20px); }
 
-/* Markdown 样式复用 */
-:deep(.markdown-body) { line-height: 1.8; font-size: 1.05rem; color: #2c3e50; }
-:deep(.markdown-body h2) { font-size: 1.5rem; margin: 30px 0 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-:deep(.markdown-body p) { margin-bottom: 18px; text-align: justify; }
-:deep(.markdown-body code) { background: #f4f4f4; padding: 2px 5px; border-radius: 4px; color: #c0392b; }
-:deep(.markdown-body img) { max-width: 100%; border-radius: 8px; display: block; margin: 20px auto; }
-:deep(.markdown-body blockquote) { border-left: 4px solid #42b883; background: #f9f9f9; margin: 20px 0; padding: 10px 20px; color: #666; }
-/* --- 针对 figure 组合的样式 --- */
+/* =========================================
+   4. Markdown 样式复用 (与 ProjectCard 统一)
+   ========================================= */
+:deep(.markdown-body) { 
+  line-height: 1.8; 
+  font-size: 1.05rem; 
+  color: var(--text-primary); /* 变量 */
+}
 
-/* 1. 让整个组合块居中，并留出上下间距 */
+:deep(.markdown-body h2) { 
+  font-size: 1.5rem; 
+  margin: 30px 0 15px; 
+  border-bottom: 1px solid var(--glass-border); /* 变量 */
+  padding-bottom: 10px; 
+  color: var(--text-primary); /* 变量 */
+}
+
+:deep(.markdown-body p) { 
+  margin-bottom: 18px; 
+  text-align: justify; 
+}
+
+:deep(.markdown-body code) { 
+  /* 通用半透明灰背景 */
+  background: rgba(128, 128, 128, 0.15); 
+  padding: 2px 5px; 
+  border-radius: 4px; 
+  color: #c0392b; /* 代码红色保留，夜间也清晰 */
+}
+
+/* 夜间模式微调代码颜色 */
+:global(html.dark) :deep(.markdown-body code) {
+  color: #ff7b72;
+}
+
+:deep(.markdown-body img) { 
+  max-width: 100%; 
+  border-radius: 8px; 
+  display: block; 
+  margin: 20px auto; 
+  box-shadow: 0 4px 12px var(--glass-shadow); /* 变量 */
+}
+
+:deep(.markdown-body blockquote) { 
+  border-left: 4px solid var(--text-highlight); 
+  /* 引用块背景改为侧边栏同款半透明色 */
+  background: var(--sidebar-bg); 
+  margin: 20px 0; 
+  padding: 10px 20px; 
+  color: var(--text-secondary); /* 变量 */
+}
+
+/* --- Figure 组合样式 --- */
 :deep(.markdown-body figure) {
   margin: 30px 0;
-  text-align: center; /* 让图片和文字都居中 */
+  text-align: center;
   display: block;
 }
 
-/* 2. 针对 figure 里面的 img */
 :deep(.markdown-body figure img) {
-  /* 你的 width="50%" 会生效，但这里可以设置个最大宽度兜底 */
   max-width: 100%; 
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  margin-bottom: 10px; /* 图片和文字之间的距离 */
+  box-shadow: 0 4px 12px var(--glass-shadow); /* 变量 */
+  margin-bottom: 10px;
 }
 
-/* 3. ⭐ 核心：针对备注文字 (figcaption) 的样式 */
 :deep(.markdown-body figcaption) {
-  font-size: 0.9rem;       /* 字号小一点 */
-  color: #888;             /* 颜色灰一点 */
-  font-style: italic;      /* 斜体，更有“备注”的感觉 */
+  font-size: 0.9rem;
+  color: var(--text-secondary); /* 变量 */
+  font-style: italic;
   line-height: 1.5;
   margin-top: 5px;
 }

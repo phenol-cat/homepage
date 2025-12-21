@@ -79,13 +79,13 @@
   text-align: center;
   margin-bottom: 50px;
   /* 底部加一条非常淡的分割线，增加仪式感 */
-  border-bottom: 1px solid rgba(0,0,0,0.05); 
+  border-bottom: 1px solid var(--glass-border); 
   padding-bottom: 30px;
 }
 
 .name {
   font-size: 2.5rem; /* 字体稍微加大一点 */
-  color: #2c3e50;
+  color: var(--text--primary);
   margin: 0 0 15px 0;
   font-weight: 700;
   letter-spacing: 1px;
@@ -93,19 +93,19 @@
 
 .university {
   font-size: 1.1rem;
-  color: #606c76; /* 稍微深一点的灰色，增加质感 */
+  color: var(--text--secondary); /* 稍微深一点的灰色，增加质感 */
   font-weight: 400;
   margin: 0;
 }
 
 /* --- 正文样式 --- */
 .article-body {
-  color: #34495e;
+  color: var(--text--primary);
 }
 
 .section-title {
   font-size: 1.5rem;
-  color: #2c3e50;
+  color: var(--text--primary);
   margin-bottom: 25px;
   font-weight: 600;
 }
@@ -116,12 +116,13 @@ p {
   font-size: 1.05rem;
   /* 两端对齐，让文字块在视觉上更整齐、学院派 */
   text-align: justify; 
+  color: var(--text--primary);
 }
 
 /* 加粗文字样式：仅加粗，无背景色 */
 strong {
   font-weight: 700;
-  color: #2c3e50;
+  color: var(--text--primary);
 }
 
 /* 列表样式：极简引用风格 */
@@ -129,7 +130,7 @@ strong {
   padding-left: 0;
   margin: 25px 0 35px 0;
   /* 左侧一条细线，不喧宾夺主 */
-  border-left: 3px solid rgba(0,0,0,0.1); 
+  border-left: 3px solid var(--glass-border); 
   margin-left: 5px;
 }
 
@@ -138,5 +139,6 @@ strong {
   line-height: 1.7;
   list-style-type: none;
   padding-left: 20px; /* 文字离左边的线稍微远一点 */
+  color: var(--text--primary);
 }
 </style>

@@ -34,25 +34,33 @@
   flex-direction: column;
   gap: 10px;
   margin-top: 20px;
-  background: rgba(255, 255, 255, 0.8); /* 半透明白 */
+  background: var(--glass-bg);
   padding: 15px;
   border-radius: 12px;
 }
 
 button {
+  /* 布局 */
+  width: 100%;
+  padding: 12px 16px;
+  text-align: left;
+  border-radius: 8px;
+  
+  /* 字体 */
+  font-size: 1rem;
+  color: var(--text-primary);
+  
+  /* 样式重置 */
   background: transparent;
   border: none;
-  padding: 12px;
-  text-align: left;
-  font-size: 1rem;
   cursor: pointer;
-  border-radius: 8px;
-  transition: all 0.3s;
-  color: #555;
+  
+  /* 只保留颜色的过渡，去掉位置移动 */
+  transition: background-color 0.3s, color 0.3s;
 }
 
 button:hover {
-  background-color: rgba(0,0,0,0.05);
+  background-color: var(--glass-bg);
 }
 
 /* 选中状态的高亮样式 */

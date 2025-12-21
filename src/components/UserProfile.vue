@@ -22,18 +22,17 @@
 </template>
 
 <style scoped>
-/* scoped 意味着这里的 CSS 只对当前组件生效，不会污染其他组件 */
-/* 这就像 C++ 的 private 成员，外部无法访问 */
-
 .profile-card {
   display: flex; /* 弹性布局，让头像和文字并排显示 */
   align-items: center;
-  background-color: #f9f9f9;
+  background-color: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* 简单的阴影 */
+  box-shadow: 0 4px 6px var(--glass-shadow);
   max-width: 500px;
   margin: 0 auto; /* 居中 */
+  transition: all 0.3s ease;
 }
 
 .avatar {
@@ -42,16 +41,20 @@
   border-radius: 50%; /* 圆形头像 */
   margin-right: 20px;
   object-fit: cover;
+  border: 2px solid var(--glass-border);
 }
 
 .info h2 {
   margin: 0;
   font-size: 1.5em;
-  color: #333;
+  font-weight: 700; 
+  /* 白天是深灰 #2c3e50，晚上自动变纯白 #fff */
+  color: var(--text-primary); 
 }
 
 .info p {
   margin: 5px 0 0;
-  color: #666;
+  line-height: 1.5; /* 增加行高，阅读更舒服 */
+  color: var(--text-secondary); 
 }
 </style>

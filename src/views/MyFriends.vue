@@ -35,7 +35,7 @@ const friendsList = ref([
   {
     name: "三硝基猫猫酚",
     avatar: "/images/avatar.png", 
-    intro: "即使现在看不到进步，也要相信“我是一个随时间变化的指数函数”",
+    intro: "实在没东西放，就把我自己放上来吧，不要原地TP！",
     link: "#", // 既然是彩蛋，这里链接可以随便写，反正会被拦截
     isMe: true // 👈 ⭐ 关键标记！一定要加上这个！
   },

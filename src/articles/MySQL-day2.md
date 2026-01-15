@@ -1,6 +1,6 @@
 ---
 title: "MySQL-day2"
-date: "2025-1-11"
+date: "2026-1-11"
 desc: "MySQL基本语法"
 tags: [ "MySQL","别问我为什么day1是1.9但是day2是1.11"]
 ---
@@ -68,3 +68,8 @@ decimal是保留几位小数用的，格式decimal（M,D），如decimal（5，2
 | 查看指定表的创建语句 | show create table 表名; |
 | 查看表结构 | desc 表名; |
 | 删除表 | drop table 表名; |
+|重命名表|rename 原表名 to 新表名|
+|修改表的结构|alter table 要修改的表名 要进行的操作 ;|
+| |alter table 要修改的表名 add 字段|
+| |alter table 要修改的表名 change 字段1 字段2|
+| |alter table 要修改的表名 drop 字段|

@@ -1,6 +1,6 @@
 ---
 title: "MySQL-day1"
-date: "2025-1-9"
+date: "2026-1-9"
 desc: "怎么工作都要MySQL,感觉得学一下"
 tags: [ "MySQL","我不想学我想摆"]
 ---

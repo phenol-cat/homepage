@@ -1,7 +1,7 @@
 ---
 title: "MySQL-day2"
 date: "2026-1-11"
-desc: "MySQL基本语法"
+desc: "库与表的操作"
 tags: [ "MySQL","别问我为什么day1是1.9但是day2是1.11"]
 ---
 

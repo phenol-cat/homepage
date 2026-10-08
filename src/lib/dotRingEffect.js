@@ -97,7 +97,6 @@ export class DotMatrixEffect {
     this.lastCols = -1
     this.lastW = -1
     this.lastH = -1
-    this.paused = false
     this._raf = 0
     this._lastT = 0
 
@@ -137,6 +136,17 @@ export class DotMatrixEffect {
     if (this._raf) return
     this._lastT = 0
     this._raf = requestAnimationFrame((t) => this._tick(t))
+  }
+
+  /**
+   * 暂停动画循环，画面停留在最后一帧。
+   * 用于"只在悬停时才需要动"的场景，避免组件长时间挂在页面上时空转。
+   */
+  pause() {
+    if (!this._raf) return
+    cancelAnimationFrame(this._raf)
+    this._raf = 0
+    this._lastT = 0
   }
 
   /** 只渲染一次静态点阵，不进入动画循环 */

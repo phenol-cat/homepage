@@ -7,6 +7,7 @@
   import BackToTop from './components/BackToTop.vue'
   import ThemeSwitch from './components/ThemeSwitch.vue'
   import ZenButton from './components/ZenButton.vue'
+  import DotMatrixCapture from './components/DotMatrixCapture.vue'
   
   // 视图导入
   import MyProjects from './views/MyProjects.vue'
@@ -68,7 +69,10 @@
 
     <aside class="sidebar-panel">
       <div class="profile-area hide-in-zen">
-        <UserProfile :name="myName" :bio="myBio" :avatar="myAvatar" />
+        <!-- 鼠标移上去时，整张个人卡片会溶解成点阵（含头像），移开还原 -->
+        <DotMatrixCapture :keep-background="true" :pitch="2.6" :dot-size="0.6">
+          <UserProfile :name="myName" :bio="myBio" :avatar="myAvatar" />
+        </DotMatrixCapture>
       </div>
       
       <div class="menu-area hide-in-zen">

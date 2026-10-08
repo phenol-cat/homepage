@@ -95,14 +95,18 @@
     <aside class="sidebar-panel">
       <!-- 收起 / 展开开关 -->
       <button
-        class="sidebar-toggle hide-in-zen"
+        class="sidebar-toggle"
         type="button"
         @click="toggleSidebar"
         :title="isCollapsed ? '展开侧边栏' : '收起侧边栏'"
         :aria-label="isCollapsed ? '展开侧边栏' : '收起侧边栏'"
         :aria-expanded="!isCollapsed"
       >
-        <SvgIcon :name="isCollapsed ? 'chevron-right' : 'chevron-left'" :size="18" />
+        <SvgIcon
+          :name="isCollapsed ? 'chevron-right' : 'chevron-left'"
+          :size="20"
+          :stroke-width="1.6"
+        />
       </button>
 
       <!--
@@ -206,26 +210,46 @@ body { margin: 0; padding: 0; overflow: hidden; font-family: var(--font-sans); }
               background-color 0.5s ease;
 }
 
-/* 收起 / 展开按钮：展开时在右上角，收起后落到窄轨中线 */
+/* 收起 / 展开按钮：贴在侧边栏右侧中线上的一个折线小把手。
+   风格参照欢迎页 —— 一层薄薄的玻璃底 + 一条细折线，不用实心圆按钮。
+   位置固定在右边缘，侧边栏宽度变化时它会跟着边缘一起平移。 */
 .sidebar-toggle {
   position: absolute;
-  top: 16px; right: 20px;
+  top: 50%; right: 0;
   z-index: 5;
-  width: 34px; height: 34px;
+  width: 22px; height: 52px;
   display: flex; align-items: center; justify-content: center;
-  border-radius: 50%;
-  border: 1px solid transparent;
-  background: transparent;
+  padding: 0 2px 0 0;
+  /* 左半边是圆角、右边贴着边缘，看起来像嵌在侧边栏上的小把手 */
+  border-radius: 11px 0 0 11px;
+  border: 1px solid var(--glass-border);
+  border-right: none;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: var(--text-secondary);
   cursor: pointer;
-  transition: right 0.45s cubic-bezier(0.25, 0.8, 0.25, 1),
-              transform 0.45s cubic-bezier(0.25, 0.8, 0.25, 1),
-              background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  /* 垂直居中：位移写在这里，不要另外再写一条规则去覆盖 */
+  transform: translateY(-50%);
+  transition: transform 0.25s ease, opacity 0.35s ease,
+              background-color 0.25s ease, border-color 0.25s ease,
+              color 0.25s ease, box-shadow 0.25s ease;
 }
 .sidebar-toggle:hover {
-  background: var(--glass-bg);
-  border-color: var(--glass-border);
   color: var(--text-primary);
+  /* 轻微的发光，和欢迎页按钮悬停时的质感呼应 */
+  box-shadow: -2px 0 18px rgba(255, 255, 255, 0.28);
+}
+.sidebar-toggle:active {
+  transform: translateY(-50%) scale(0.94);
+}
+
+/* 沉浸模式下把手也退场。
+   注意这里没有用 .hide-in-zen：那条规则里带 transform: translateY(0)，
+   会把上面用来垂直居中的 translateY(-50%) 覆盖掉。 */
+.zen-active .sidebar-toggle {
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* 两层叠放：展开层 + 收起后的窄轨层 */
@@ -320,11 +344,6 @@ body { margin: 0; padding: 0; overflow: hidden; font-family: var(--font-sans); }
   transition: opacity 0.22s ease 0.15s,
               transform 0.45s cubic-bezier(0.25, 0.8, 0.25, 1) 0s,
               visibility 0s linear 0s;
-}
-
-.viewport-container.sidebar-collapsed .sidebar-toggle {
-  right: 50%;
-  transform: translateX(50%);
 }
 
 .profile-area { margin-bottom: 40px; }
@@ -467,6 +486,16 @@ body { margin: 0; padding: 0; overflow: hidden; font-family: var(--font-sans); }
   }
   .sidebar-layer--rail { display: none; }
   .sidebar-toggle { display: none; }
+
+  /* 手机端不支持收起，但收起状态可能已经被记住（localStorage），
+     所以这里要把收起造成的影响一并还原，否则底部版权会莫名消失、按钮会变小 */
+  .viewport-container.sidebar-collapsed .footer-copy { opacity: 1; }
+  .viewport-container.sidebar-collapsed .button-group { gap: 20px; }
+  .viewport-container.sidebar-collapsed :deep(.theme-btn),
+  .viewport-container.sidebar-collapsed :deep(.zen-btn) {
+    width: 50px;
+    height: 50px;
+  }
 
   .content-area {
     flex: none;

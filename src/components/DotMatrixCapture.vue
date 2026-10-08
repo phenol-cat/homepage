@@ -16,6 +16,22 @@
  * 默认触发方式（mode='visible'）：只要元素出现在视口里就切成点阵，
  * 滚出视口则还原成普通显示，同时停掉渲染循环，不在看不见的地方空转。
  * 另外还有 'hover'（悬停时溶解、移开还原）和 'always'（一直点阵）两种模式。
+ *
+ * 除了上面的自动规则，还可以从外部主动控制开关，有两种方式：
+ *
+ *   1) 声明式：用 open 属性（三态）
+ *      open 不传  → 按 mode 的自动规则走
+ *      :open="true"  → 强制点阵化
+ *      :open="false" → 强制普通显示
+ *
+ *      <DotMatrixCapture :open="isDotty"> ... </DotMatrixCapture>
+ *
+ *   2) 命令式：拿到组件实例后调用方法
+ *      const dm = ref(null)
+ *      dm.value.open()    // 强制开启
+ *      dm.value.close()   // 强制关闭
+ *      dm.value.toggle()  // 切换
+ *      dm.value.auto()    // 交还给自动规则（可见即开）
  */
 import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import DotMatrixEffect from '../lib/dotRingEffect'
@@ -32,6 +48,11 @@ const props = defineProps({
   ringR: { type: Number, default: 48 },
   /** 'visible' = 只要能看到就点阵化（默认）；'hover' = 悬停时；'always' = 一直 */
   mode: { type: String, default: 'visible' },
+  /**
+   * 主动控制开关（三态）：不传 = 按 mode 的自动规则；
+   * true = 强制点阵化；false = 强制普通显示。
+   */
+  open: { type: Boolean, default: null },
   /** 是否把背景色也一起采样（默认只采样内容，避免糊成一片实心点） */
   keepBackground: { type: Boolean, default: false },
   /** 关闭磁环交互（只保留静态点阵外观） */
@@ -45,11 +66,22 @@ const canvasEl = ref(null)
 const hovering = ref(false)
 const inView = ref(false) // 是否出现在视口里（mode='visible' 时用）
 const enabled = ref(false) // 快照成功后才允许点阵化，避免拍失败时内容被藏起来
-const active = computed(() => {
-  if (!enabled.value) return false
+// 手动开关：null 表示没有手动干预，交回给 mode 的自动规则
+const manualOpen = ref(null)
+
+/** 按 mode 算出来的自动状态 */
+const autoActive = computed(() => {
   if (props.mode === 'always') return true
   if (props.mode === 'hover') return hovering.value
   return inView.value
+})
+
+/** 手动干预优先：open 属性 > 方法调用 > 自动规则 */
+const override = computed(() => (props.open == null ? manualOpen.value : props.open))
+
+const active = computed(() => {
+  if (!enabled.value) return false
+  return override.value == null ? autoActive.value : !!override.value
 })
 
 let fx = null
@@ -137,6 +169,30 @@ watch(active, (isActive) => {
   if (isActive) fx.start()
   else fx.pause()
 })
+
+/* ---------- 对外暴露的手动开关接口 ---------- */
+
+/** 强制开启点阵化 */
+function open() {
+  manualOpen.value = true
+}
+
+/** 强制关闭，回到普通显示 */
+function close() {
+  manualOpen.value = false
+}
+
+/** 在开启 / 关闭之间切换 */
+function toggle() {
+  manualOpen.value = !(override.value ?? autoActive.value)
+}
+
+/** 取消手动干预，交还给 mode 的自动规则（默认就是"可见即开"） */
+function auto() {
+  manualOpen.value = null
+}
+
+defineExpose({ open, close, toggle, auto, active })
 
 /** 尺寸变化 / 主题变化 / 内容变化都可能让快照过期，统一走防抖重建 */
 function scheduleRebuild(delay = 120) {

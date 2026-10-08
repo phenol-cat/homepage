@@ -221,9 +221,11 @@ function freezeTransitions(root) {
  */
 export async function elementToCanvas(el, opts = {}) {
   const scale = opts.scale || 2
-  const rect = el.getBoundingClientRect()
-  const width = Math.max(1, Math.round(rect.width))
-  const height = Math.max(1, Math.round(rect.height))
+  // 用布局尺寸而不是 getBoundingClientRect：
+  // 后者会把祖先元素上的 transform（比如卡片悬停放大的 scale）算进去，
+  // 导致快照比真实内容大一圈、点阵和内容对不齐。
+  const width = Math.max(1, el.offsetWidth || Math.round(el.getBoundingClientRect().width))
+  const height = Math.max(1, el.offsetHeight || Math.round(el.getBoundingClientRect().height))
 
   const restoreTransitions = freezeTransitions(el)
   let clone

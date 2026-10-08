@@ -4,8 +4,17 @@
 
 /* 🌞 默认模式 (Light Mode) */
 :root {
+  /* --- 字体 --- */
+  /* 原来只写了 'Inter' 但没有真正加载这个字体，会静默回退到浏览器默认字体，
+     中英文混排时观感很飘。这里改成一套明确的中英文回退链：
+     有 Inter 就用，没有就一路退到各平台的系统无衬线字体。 */
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', ui-monospace, SFMono-Regular,
+    Menlo, Consolas, 'Courier New', monospace;
+
   /* 基础字体设置 */
-  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--font-sans);
   line-height: 1.5;
   font-weight: 400;
 
@@ -18,6 +27,8 @@
   
   /* 玻璃卡片 (关键！白底半透明) */
   --glass-bg: rgba(255, 255, 255, 0.7);
+  /* 悬停时的玻璃底色：比常态更亮一点，让"可点击"的感觉更明确 */
+  --glass-bg-hover: rgba(255, 255, 255, 0.9);
   --glass-border: rgba(255, 255, 255, 0.4);
   --glass-shadow: rgba(0, 0, 0, 0.15);
   
@@ -38,6 +49,9 @@ html.dark {
   /* --- 2. 暗黑玻璃效果 (关键修改) --- */
   /* 背景：由白变黑，且稍微深一点，保证文字可读性 */
   --glass-bg: rgba(0, 0, 0, 0.6); 
+
+  /* 悬停态：往白色方向提一点，在深色背景上看起来是"被点亮" */
+  --glass-bg-hover: rgba(255, 255, 255, 0.14);
   
   /* 边框：在暗色背景下，依然需要一点点白色的光泽来区分边缘 */
   --glass-border: rgba(255, 255, 255, 0.295); 
@@ -86,7 +100,7 @@ a {
 
 /* 针对 Markdown 内容的容器 */
 .markdown-body {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-sans);
   color: var(--text-primary); /* 跟随主题变色 */
   line-height: 1.8;
   font-size: 1.05rem;
@@ -131,13 +145,96 @@ a {
   background-color: rgba(128, 128, 128, 0.15); /* 通用半透明灰，黑白模式都适用 */
   padding: 0.2em 0.4em;
   border-radius: 3px;
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.9em;
   color: #d63200; /* 代码文字红一点 */
 }
 
 html.dark .markdown-body code {
   color: #ff7b72; /* 夜间模式下代码文字亮一点 */
+}
+
+/* =========================================
+   📊 3.1 表格样式 (MySQL 笔记等大量使用)
+   作用：markdown-it 默认输出的表格是浏览器原生样式，
+   和整体玻璃质感严重脱节，这里统一成"玻璃表格"。
+   ========================================= */
+.markdown-body table {
+  width: 100%;
+  margin: 24px 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 0.95rem;
+  background: var(--sidebar-bg);
+
+  /* 手机端表格过宽时允许横向滚动，不撑破容器 */
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.markdown-body thead th {
+  background: var(--glass-border);
+  color: var(--text-primary);
+  font-weight: 700;
+  text-align: left;
+  padding: 12px 16px;
+  white-space: nowrap;
+}
+
+.markdown-body tbody td {
+  padding: 12px 16px;
+  color: var(--text-primary);
+  border-top: 1px solid var(--glass-border);
+  vertical-align: top;
+  /* 单元格内的长代码允许换成正常分行，方便横向滚动 */
+  white-space: normal;
+}
+
+/* 斑马纹：让长表格更容易横向读数 */
+.markdown-body tbody tr:nth-child(even) {
+  background: rgba(128, 128, 128, 0.06);
+}
+
+.markdown-body tbody tr:hover {
+  background: var(--glass-bg-hover);
+  transition: background-color 0.2s ease;
+}
+
+/* 表格里的行内代码不要再互相挤 */
+.markdown-body td code,
+.markdown-body th code {
+  white-space: nowrap;
+}
+
+/* =========================================
+   📊 3.2 代码块样式
+   作用：原来只给行内代码上了色，多行代码块 <pre> 没有任何样式。
+   ========================================= */
+.markdown-body pre {
+  margin: 24px 0;
+  padding: 18px 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  border: 1px solid var(--glass-border);
+  /* 浅色模式下用深底，深色模式下用更深的底，总之都是"终端感" */
+  background: rgba(30, 34, 42, 0.92);
+  line-height: 1.6;
+}
+
+.markdown-body pre code {
+  background: none;
+  padding: 0;
+  color: #e6edf3;
+  font-size: 0.9rem;
+}
+
+/* 代码块内的文字不受 html.dark 的红色规则影响 */
+html.dark .markdown-body pre code {
+  color: #e6edf3;
 }
 
 /* 引用块 */
@@ -175,4 +272,40 @@ html.dark .markdown-body code {
 .markdown-body a:hover {
   background-color: rgba(66, 184, 131, 0.1); /* 淡淡的绿色背景 */
   border-bottom-style: solid; /* 变成实线 */
+}
+
+/* =========================================
+   ♿ 4. 无障碍与动效偏好
+   作用：让键盘用户能看到自己在操作哪个元素，
+   也让"系统里关闭了动画"的用户不被动画打扰。
+   ========================================= */
+
+/* 键盘（Tab）聚焦时才显示描边，鼠标点击不显示，避免视觉噪音 */
+:focus-visible {
+  outline: 2px solid var(--text-highlight);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* 鼠标点击后不残留焦点框（仅限按钮） */
+button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* 文字选中时的颜色，统一成主题高亮色 */
+::selection {
+  background: rgba(66, 184, 131, 0.35);
+  color: var(--text-primary);
+}
+
+/* 尊重系统的"减少动态效果"设置 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

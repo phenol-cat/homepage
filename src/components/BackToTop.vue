@@ -1,4 +1,6 @@
 <script setup>
+import SvgIcon from './SvgIcon.vue'
+
 // 接收父组件的指令：显示还是隐藏
 defineProps({
   visible: Boolean
@@ -13,10 +15,12 @@ defineEmits(['click'])
     <button 
       v-if="visible" 
       class="back-top-btn" 
+      type="button"
       @click="$emit('click')"
       title="回到顶部"
+      aria-label="回到顶部"
     >
-      ↑
+      <SvgIcon name="arrow-up" :size="20" />
     </button>
   </Transition>
 </template>
@@ -34,7 +38,6 @@ defineEmits(['click'])
   background: #42b883;
   color: white;
   border: none;
-  font-size: 1.2rem;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(66, 184, 131, 0.4);
   z-index: 100; /* 保证浮在内容上面 */

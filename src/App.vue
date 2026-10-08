@@ -81,7 +81,7 @@
           <ZenButton :active="isZenMode" @click="toggleZenMode" />
         </div>
         
-        <p class="hide-in-zen">© 2025 Personal Page</p>
+        <p class="hide-in-zen">© 2025 三硝基猫猫酚 · Made with Vue</p>
       </div>
     </aside>
 
@@ -103,7 +103,7 @@
 </template>
 
 <style>
-body { margin: 0; padding: 0; overflow: hidden; font-family: 'Inter', sans-serif; }
+body { margin: 0; padding: 0; overflow: hidden; font-family: var(--font-sans); }
 </style>
 
 <style scoped>

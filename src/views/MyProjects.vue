@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import ProjectCard from '../components/ProjectCard.vue'
+import SvgIcon from '../components/SvgIcon.vue'
 import MarkdownIt from 'markdown-it'
 import fm from 'front-matter' 
 
@@ -10,6 +11,11 @@ const md = new MarkdownIt({
   linkify: true,
   typographer: true
 })
+
+// 项目文档里的图片/视频路径按 "/homepage/..." 书写，这里统一替换成当前部署路径
+const base = import.meta.env.BASE_URL
+const fixPath = (url) => (url ? url.split('/homepage/').join(base) : url)
+const renderMarkdown = (body) => md.render(body).split('/homepage/').join(base)
 
 // 2. 自动读取 .md 文件 (使用 front-matter)
 const mdFiles = import.meta.glob('../projects/*.md', { 
@@ -28,7 +34,9 @@ for (const path in mdFiles) {
     
     allProjects.value.push({
       ...attributes, // 包含 id, title, image, tags 等
-      renderedHtml: md.render(body) // 渲染正文
+      // 封面图来自 front-matter，不经过 Markdown 渲染，需要单独修正路径
+      image: fixPath(attributes.image),
+      renderedHtml: renderMarkdown(body) // 渲染正文
     })
   } catch (e) {
     console.error(`解析文件 ${path} 出错:`, e)
@@ -64,13 +72,17 @@ function closeProject() {
         />
         
         <div v-if="allProjects.length === 0" class="empty-tip">
-          还没有项目... 请在 src/projects/ 下添加 .md 文件
+          <SvgIcon name="inbox" :size="32" />
+          <span>还没有项目... 请在 src/projects/ 下添加 .md 文件</span>
         </div>
       </div>
 
       <div v-else class="project-detail">
         <div class="detail-nav">
-          <button class="back-btn" @click="closeProject">← 返回列表</button>
+          <button class="back-btn" type="button" @click="closeProject">
+            <SvgIcon name="arrow-left" :size="16" />
+            <span>返回列表</span>
+          </button>
         </div>
 
         <div class="detail-content">
@@ -79,7 +91,10 @@ function closeProject() {
           <h1>{{ selectedProject.title }}</h1>
           
           <div class="meta-row">
-            <span class="date">📅 {{ selectedProject.date }}</span>
+            <span class="date">
+              <SvgIcon name="calendar" :size="15" />
+              {{ selectedProject.date }}
+            </span>
             <div class="tags">
               <span v-for="t in selectedProject.tags" :key="t" class="tag">{{ t }}</span>
             </div>
@@ -120,6 +135,12 @@ function closeProject() {
   text-align: center;
   grid-column: 1 / -1;
   padding-top: 50px;
+
+  /* 图标在上、文字在下 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
 
 /* =========================================
@@ -147,6 +168,11 @@ function closeProject() {
   color: var(--text-primary);
   cursor: pointer;
   transition: all 0.3s;
+
+  /* 图标与文字居中对齐 */
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .back-btn:hover {
@@ -192,6 +218,14 @@ h1 {
   align-items: center; 
   margin-bottom: 20px; 
   color: var(--text-secondary); /* 变量 */
+  flex-wrap: wrap;
+}
+
+/* 日期一栏的图标与文字对齐 */
+.meta-row .date {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .tag { 

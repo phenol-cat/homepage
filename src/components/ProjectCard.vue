@@ -1,4 +1,6 @@
 <script setup>
+  import SvgIcon from './SvgIcon.vue'
+
   // 接收父组件传来的数据
   defineProps({
     project: {
@@ -13,7 +15,10 @@
     <div class="card-image">
       <img :src="project.image" :alt="project.title" loading="lazy" />
       <div class="overlay">
-        <span class="view-text">查看详情</span>
+        <span class="view-text">
+          <SvgIcon name="arrow-right" :size="16" />
+          查看详情
+        </span>
       </div>
     </div>
 
@@ -68,7 +73,7 @@
   /* 玻璃边框变量本质是 "半透明的白" */
   /* 在白天：它比默认背景更白 */
   /* 在黑夜：它在黑色背景上叠加一层白光，让卡片"点亮"，但文字依然清晰 */
-  background: var(--glass-border); /* ⬅️ 恢复变亮逻辑 */
+  background: var(--glass-bg-hover); /* ⬅️ 使用专用的悬停变量，明暗主题下都是"变亮" */
   
   /* 悬停阴影：加深 */
   box-shadow: 0 15px 30px var(--glass-shadow);
@@ -117,6 +122,9 @@
   border-radius: 20px;
   background: rgba(255,255,255,0.2);
   backdrop-filter: blur(4px);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .project-card:hover .overlay {

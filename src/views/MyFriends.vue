@@ -1,6 +1,10 @@
 <script setup>
 import { ref } from 'vue'
 import FriendCard from '../components/FriendCard.vue'
+import SvgIcon from '../components/SvgIcon.vue'
+
+// 图片路径统一从 Vite 的 base 推导，这样以后改仓库名 / 部署路径时不用再全局替换
+const base = import.meta.env.BASE_URL
 
 // 1. 定义彩蛋池 (用来存当前屏幕上显示的提示)
 const easterEggs = ref([])
@@ -34,20 +38,20 @@ function handleCardClick(e, friend) {
 const friendsList = ref([
   {
     name: "三硝基猫猫酚",
-    avatar: "/homepage/images/avatar.png", 
+    avatar: `${base}images/avatar.png`, 
     intro: "实在没东西放，就把我自己放上来吧，不要原地TP！",
     link: "#", // 既然是彩蛋，这里链接可以随便写，反正会被拦截
     isMe: true // 👈 ⭐ 关键标记！一定要加上这个！
   },
   {
     name: "SelfLo",
-    avatar: "/homepage/images/selflo_avatar.png",
+    avatar: `${base}images/selflo_avatar.png`,
     intro: "Stay hungry, stay foolish.",
     link: "https://selflo06.xyz/"
   },
   {
     name:"Runnel",
-    avatar:"/homepage/images/Runnel_avatar.jpg",
+    avatar:`${base}images/Runnel_avatar.jpg`,
     intro:"Il nous montre une correspondance subtiles et fine， comme venue du vide.",
     link:"https://www.runnelzhang.com/"
   },
@@ -59,7 +63,10 @@ const friendsList = ref([
   <div class="friends-container">
     
     <header class="page-header">
-      <h1>🤝 友情链接</h1>
+      <h1>
+        <SvgIcon name="users" :size="28" />
+        <span>友情链接</span>
+      </h1>
       <p>很高兴遇见这些有趣的小伙伴。</p>
     </header>
 
@@ -88,9 +95,20 @@ const friendsList = ref([
 <style scoped>
 /* --- 原有样式保持不变 --- */
 .friends-container { width: 100%; padding: 20px 0; display: flex; flex-direction: column; }
-.page-header { text-align: center; margin-bottom: 30px; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-.page-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
-.divider { border: 0; height: 1px; background: rgba(255,255,255,0.3); margin-bottom: 40px; }
+
+/* --- 页头：改用主题变量，深色模式下不再是"白字配深色" --- */
+.page-header { text-align: center; margin-bottom: 30px; color: var(--text-primary); }
+.page-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  /* 图标与标题文字并排居中对齐 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+.page-header p { color: var(--text-secondary); margin: 0; }
+.divider { border: 0; height: 1px; background: var(--glass-border); margin-bottom: 40px; }
 .friends-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 30px; padding-bottom: 50px; }
 
 /* --- 🥚 彩蛋样式 --- */

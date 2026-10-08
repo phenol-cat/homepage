@@ -1,4 +1,6 @@
 <script setup>
+import SvgIcon from './SvgIcon.vue'
+
 defineProps({
   active: Boolean // 接收父组件传来的状态，决定显示“相框”还是“叉叉”
 })
@@ -8,10 +10,13 @@ defineEmits(['click']) // 告诉父组件我被点了
 <template>
   <button 
     class="zen-btn" 
+    type="button"
     @click="$emit('click')" 
     :title="active ? '退出沉浸模式' : '进入沉浸模式'"
+    :aria-label="active ? '退出沉浸模式' : '进入沉浸模式'"
+    :aria-pressed="active"
   >
-    <span>{{ active ? '❌' : '🖼️' }}</span>
+    <SvgIcon :name="active ? 'minimize' : 'maximize'" :size="20" />
   </button>
 </template>
 
@@ -24,7 +29,6 @@ defineEmits(['click']) // 告诉父组件我被点了
   cursor: pointer;
   padding: 8px;
   border-radius: 50%;
-  font-size: 1.2rem;
   /* 确保宽高和 ThemeSwitch 一致 */
   width: 50px; 
   height: 50px;

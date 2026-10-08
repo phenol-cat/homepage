@@ -1,4 +1,7 @@
 <script setup>
+// 引入统一图标组件，替代原来文字里的箭头符号
+import SvgIcon from './SvgIcon.vue'
+
 // 接收父组件传来的朋友信息对象
 const props = defineProps({
   friend: {
@@ -10,7 +13,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <a :href="friend.link" target="_blank" class="friend-card">
+  <a :href="friend.link" target="_blank" rel="noopener noreferrer" class="friend-card">
     
     <div class="avatar-wrapper">
       <img v-if="friend.avatar" :src="friend.avatar" :alt="friend.name" class="avatar" loading="lazy" />
@@ -23,7 +26,8 @@ const props = defineProps({
     </div>
 
     <div class="visit-btn">
-      访问主页 →
+      <span>访问主页</span>
+      <SvgIcon name="external-link" :size="16" />
     </div>
 
   </a>
@@ -39,23 +43,24 @@ const props = defineProps({
   text-decoration: none; /* 去掉链接下划线 */
   
   /* 玻璃拟态风格 */
-  background: rgba(255, 255, 255, 0.6);
+  /* 全部改用主题变量，深色模式下自动变成暗色玻璃 */
+  background: var(--glass-bg);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--glass-border);
   border-radius: 20px; /* 更大的圆角 */
   padding: 30px 25px;
   
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* 更有弹性的过渡曲线 */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 15px var(--glass-shadow);
   height: 100%; /* 撑满网格高度 */
 }
 
 /* 悬停特效：上浮 + 变亮 + 阴影 */
 .friend-card:hover {
   transform: translateY(-8px);
-  background: rgba(255, 255, 255, 0.85);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-  border-color: rgba(255, 255, 255, 0.8);
+  background: var(--glass-bg-hover);
+  box-shadow: 0 15px 30px var(--glass-shadow);
+  border-color: var(--glass-border);
 }
 
 /* --- 1. 头像区域 --- */
@@ -70,8 +75,8 @@ const props = defineProps({
   border-radius: 50%;
   object-fit: cover;
   /* 给头像加一个精致的白圈和阴影 */
-  border: 4px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  border: 4px solid var(--glass-border);
+  box-shadow: 0 5px 15px var(--glass-shadow);
   transition: transform 0.3s;
 }
 
@@ -86,7 +91,7 @@ const props = defineProps({
   background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
   display: flex; align-items: center; justify-content: center;
   font-size: 2rem; color: white; font-weight: bold;
-  border: 4px solid rgba(255, 255, 255, 0.9);
+  border: 4px solid var(--glass-border);
 }
 
 /* --- 2. 信息区域 --- */
@@ -98,12 +103,12 @@ const props = defineProps({
 .name {
   margin: 0 0 10px 0;
   font-size: 1.4rem;
-  color: #2c3e50;
+  color: var(--text-primary);
   font-weight: 700;
 }
 
 .intro {
-  color: #666;
+  color: var(--text-secondary);
   font-size: 0.95rem;
   line-height: 1.6;
   margin: 0 0 25px 0;
@@ -127,6 +132,11 @@ const props = defineProps({
   font-weight: 600;
   box-shadow: 0 4px 12px rgba(66, 184, 131, 0.3);
   transition: all 0.3s;
+
+  /* 图标与文字居中对齐 */
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* 悬停时按钮变宽一点点 */

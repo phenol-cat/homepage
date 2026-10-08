@@ -1,10 +1,16 @@
 <script setup>
 import { ref } from 'vue'
 import ArticleCard from '../components/ArticleCard.vue' // 引入新写的卡片
+import SvgIcon from '../components/SvgIcon.vue'
 import MarkdownIt from 'markdown-it'
 import fm from 'front-matter'
 
 const md = new MarkdownIt({ html: true, linkify: true, typographer: true })
+
+// 文章里的图片路径是按 "/homepage/..." 写的，这里统一替换成当前部署路径，
+// 以后换仓库名只需要改 vite.config.js 里的 base，不用再逐篇改文章。
+const base = import.meta.env.BASE_URL
+const renderMarkdown = (body) => md.render(body).split('/homepage/').join(base)
 
 // 1. 读取 src/articles 下的文件
 const mdFiles = import.meta.glob('../articles/*.md', { 
@@ -20,7 +26,7 @@ for (const path in mdFiles) {
     const { attributes, body } = fm(mdFiles[path])
     allArticles.value.push({
       ...attributes,
-      renderedHtml: md.render(body)
+      renderedHtml: renderMarkdown(body)
     })
   } catch (e) { console.error(e) }
 }
@@ -48,19 +54,29 @@ const closeArticle = () => selectedArticle.value = null
         />
         
         <div v-if="allArticles.length === 0" class="empty-tip">
-          📭 暂无文章，请在 src/articles/ 下创建 .md 文件
+          <SvgIcon name="inbox" :size="32" />
+          <span>暂无文章，请在 src/articles/ 下创建 .md 文件</span>
         </div>
       </div>
 
       <div v-else class="article-detail">
-        <button class="back-btn" @click="closeArticle">← 返回文章列表</button>
+        <button class="back-btn" type="button" @click="closeArticle">
+          <SvgIcon name="arrow-left" :size="16" />
+          <span>返回文章列表</span>
+        </button>
         
         <div class="paper-content">
           <header class="article-header">
             <h1>{{ selectedArticle.title }}</h1>
             <div class="meta">
-              <span>📅 {{ selectedArticle.date }}</span>
-              <span v-if="selectedArticle.tags">🏷️ {{ selectedArticle.tags.join(', ') }}</span>
+              <span class="meta-item">
+                <SvgIcon name="calendar" :size="15" />
+                {{ selectedArticle.date }}
+              </span>
+              <span v-if="selectedArticle.tags" class="meta-item">
+                <SvgIcon name="tag" :size="15" />
+                {{ selectedArticle.tags.join(', ') }}
+              </span>
             </div>
           </header>
 
@@ -101,7 +117,12 @@ const closeArticle = () => selectedArticle.value = null
   text-align: center; 
   /* 颜色变量化 */
   color: var(--text-secondary); 
-  margin-top: 50px; 
+  margin-top: 50px;
+  /* 图标在上、文字在下，居中排列 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
 
 /* =========================================
@@ -128,6 +149,11 @@ const closeArticle = () => selectedArticle.value = null
   color: var(--text-primary);
   cursor: pointer;
   transition: all 0.3s;
+
+  /* 图标与文字居中对齐 */
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .back-btn:hover { 
@@ -167,6 +193,14 @@ const closeArticle = () => selectedArticle.value = null
   font-size: 0.9rem; 
   display: flex; 
   gap: 20px; 
+  flex-wrap: wrap;
+}
+
+/* 每个元信息（日期 / 标签）的图标与文字对齐 */
+.meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .divider { 

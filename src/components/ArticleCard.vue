@@ -1,4 +1,6 @@
 <script setup>
+import SvgIcon from './SvgIcon.vue'
+
 const props = defineProps({
   article: {
     type: Object,
@@ -26,7 +28,7 @@ const props = defineProps({
     </div>
 
     <div class="arrow-box">
-      →
+      <SvgIcon name="arrow-right" :size="22" />
     </div>
 
   </div>
@@ -58,7 +60,7 @@ const props = defineProps({
 .article-card:hover {
   /* 悬停背景：使用玻璃边框变量 (它通常是一个半透明的亮色)，或者定义一个新的 hover 变量 */
   /* 这里用 glass-border 代替纯白，能在黑夜模式下产生微微发光的效果 */
-  background: var(--glass-border); /* ⬅️ 修改 */
+  background: var(--glass-bg-hover); /* ⬅️ 修改：用专门的悬停变量，浅色深色都能正确"变亮" */
   
   transform: translateX(10px);
   
@@ -142,8 +144,6 @@ const props = defineProps({
 
 /* --- 右侧箭头 --- */
 .arrow-box {
-  font-size: 1.5rem;
-  
   /* 默认颜色：使用次要文字色，或者是玻璃边框色(很淡) */
   color: var(--text-secondary); /* ⬅️ 修改 (原 #ddd) */
   

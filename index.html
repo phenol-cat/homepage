@@ -1,10 +1,44 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/jpg" href="/favicon.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>my-personal-home</title>
+
+    <!-- 基础站点信息 -->
+    <title>三硝基猫猫酚 | 个人主页</title>
+    <meta name="description" content="三硝基猫猫酚的个人主页：项目展示、学习笔记与友情链接。" />
+    <meta name="author" content="三硝基猫猫酚" />
+    <!-- 浏览器地址栏 / 移动端状态栏的配色，跟随深浅主题 -->
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1e222a" media="(prefers-color-scheme: dark)" />
+
+    <!-- 分享到聊天软件时展示的信息 -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://phenol-cat.github.io/homepage/" />
+    <meta property="og:title" content="三硝基猫猫酚 | 个人主页" />
+    <meta property="og:description" content="项目展示、学习笔记与友情链接。" />
+    <!-- 部分聊天软件要求这个地址是完整网址，换域名时记得一起改 -->
+    <meta property="og:image" content="https://phenol-cat.github.io/homepage/images/avatar.png" />
+
+    <!--
+      防闪烁脚本：在页面渲染之前先把主题类名挂到 <html> 上。
+      否则深色模式用户每次打开都会先看到一闪而过的白色页面。
+      这段必须内联在这里，不能挪进组件。
+    -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('theme')
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+          if (saved === 'dark' || (!saved && prefersDark)) {
+            document.documentElement.classList.add('dark')
+          }
+        } catch (e) {
+          /* localStorage 被禁用时静默忽略，不影响页面正常显示 */
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="app"></div>

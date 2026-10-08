@@ -1,3 +1,7 @@
+<script setup>
+  import SvgIcon from '../components/SvgIcon.vue'
+</script>
+
 <template>
   <div class="about-content-area">
       
@@ -52,13 +56,27 @@
     </header>
 
     <article class="article-body">
-      <p>我的GitHub主页是:</p>
-      <a href="https://github.com/phenol-cat" target="_blank">https://github.com/phenol-cat</a>
-      <p>我的B站主页是:</p>
-      <a href="https://space.bilibili.com/522695854" target="_blank">https://space.bilibili.com/522695854</a>
-      <p>我的邮箱是:</p>
-      <a >241880512@smail.nju.edu.cn</a>
-      <p>顺嘴一提，我的steam好友码是<a>1776774789</a>，战网是<a>风笛#51501</a>，欢迎来找我玩喵</p>
+      <ul class="contact-list">
+        <li>
+          <SvgIcon name="link" :size="18" />
+          <span class="contact-label">GitHub</span>
+          <a href="https://github.com/phenol-cat" target="_blank" rel="noopener noreferrer">github.com/phenol-cat</a>
+        </li>
+        <li>
+          <SvgIcon name="link" :size="18" />
+          <span class="contact-label">哔哩哔哩</span>
+          <a href="https://space.bilibili.com/522695854" target="_blank" rel="noopener noreferrer">space.bilibili.com/522695854</a>
+        </li>
+        <li>
+          <SvgIcon name="mail" :size="18" />
+          <span class="contact-label">邮箱</span>
+          <a href="mailto:241880512@smail.nju.edu.cn">241880512@smail.nju.edu.cn</a>
+        </li>
+      </ul>
+
+      <p class="extra-tip">
+        顺嘴一提，我的 Steam 好友码是 <strong>1776774789</strong>，战网是 <strong>风笛#51501</strong>，欢迎来找我玩喵。
+      </p>
     </article>
   </div>
 </template>
@@ -85,7 +103,7 @@
 
 .name {
   font-size: 2.5rem; /* 字体稍微加大一点 */
-  color: var(--text--primary);
+  color: var(--text-primary);
   margin: 0 0 15px 0;
   font-weight: 700;
   letter-spacing: 1px;
@@ -93,19 +111,19 @@
 
 .university {
   font-size: 1.1rem;
-  color: var(--text--secondary); /* 稍微深一点的灰色，增加质感 */
+  color: var(--text-secondary); /* 稍微深一点的灰色，增加质感 */
   font-weight: 400;
   margin: 0;
 }
 
 /* --- 正文样式 --- */
 .article-body {
-  color: var(--text--primary);
+  color: var(--text-primary);
 }
 
 .section-title {
   font-size: 1.5rem;
-  color: var(--text--primary);
+  color: var(--text-primary);
   margin-bottom: 25px;
   font-weight: 600;
 }
@@ -116,13 +134,13 @@ p {
   font-size: 1.05rem;
   /* 两端对齐，让文字块在视觉上更整齐、学院派 */
   text-align: justify; 
-  color: var(--text--primary);
+  color: var(--text-primary);
 }
 
 /* 加粗文字样式：仅加粗，无背景色 */
 strong {
   font-weight: 700;
-  color: var(--text--primary);
+  color: var(--text-primary);
 }
 
 /* 列表样式：极简引用风格 */
@@ -139,6 +157,49 @@ strong {
   line-height: 1.7;
   list-style-type: none;
   padding-left: 20px; /* 文字离左边的线稍微远一点 */
-  color: var(--text--primary);
+  color: var(--text-primary);
+}
+
+/* --- 联系方式列表 --- */
+.contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 25px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.contact-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-secondary);
+}
+
+.contact-label {
+  min-width: 72px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* 联系方式里的链接：保持极客感的虚线底边 */
+.contact-list a {
+  color: var(--text-highlight);
+  border-bottom: 1px dashed var(--text-highlight);
+  transition: all 0.2s;
+  word-break: break-all;
+}
+
+.contact-list a:hover {
+  background-color: rgba(66, 184, 131, 0.1);
+  border-bottom-style: solid;
+}
+
+.extra-tip {
+  padding: 16px 20px;
+  border-left: 3px solid var(--text-highlight);
+  background: var(--sidebar-bg);
+  border-radius: 0 8px 8px 0;
 }
 </style>

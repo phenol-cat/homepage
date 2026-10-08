@@ -11,12 +11,11 @@
  * 工作原理：
  *   1. 用 domSnapshot 把插槽渲染出的真实 DOM 拍成一张画布；
  *   2. 把这张画布交给 DotMatrixEffect 采样成点阵；
- *   3. 原始内容和点阵画布叠在一起做交叉淡入淡出 ——
- *      hover 模式下平时是原样，鼠标移上去才"溶解"成点阵，移开又还原。
+ *   3. 原始内容和点阵画布叠在一起做交叉淡入淡出。
  *
- * 为什么默认只在 hover 时生效：点阵化之后文字细节会明显损失，
- * 如果是常驻状态，卡片上的信息就不好读了。作为一个交互彩蛋更合适，
- * 想要常驻把 mode 设成 'always' 即可。
+ * 默认触发方式（mode='visible'）：只要元素出现在视口里就切成点阵，
+ * 滚出视口则还原成普通显示，同时停掉渲染循环，不在看不见的地方空转。
+ * 另外还有 'hover'（悬停时溶解、移开还原）和 'always'（一直点阵）两种模式。
  */
 import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import DotMatrixEffect from '../lib/dotRingEffect'
@@ -31,8 +30,8 @@ const props = defineProps({
   captureR: { type: Number, default: 120 },
   /** 圆环半径 */
   ringR: { type: Number, default: 48 },
-  /** 'hover' = 悬停时点阵化，'always' = 一直点阵化 */
-  mode: { type: String, default: 'hover' },
+  /** 'visible' = 只要能看到就点阵化（默认）；'hover' = 悬停时；'always' = 一直 */
+  mode: { type: String, default: 'visible' },
   /** 是否把背景色也一起采样（默认只采样内容，避免糊成一片实心点） */
   keepBackground: { type: Boolean, default: false },
   /** 关闭磁环交互（只保留静态点阵外观） */
@@ -44,13 +43,20 @@ const contentEl = ref(null)
 const canvasEl = ref(null)
 
 const hovering = ref(false)
+const inView = ref(false) // 是否出现在视口里（mode='visible' 时用）
 const enabled = ref(false) // 快照成功后才允许点阵化，避免拍失败时内容被藏起来
-const active = computed(() => enabled.value && (props.mode === 'always' || hovering.value))
+const active = computed(() => {
+  if (!enabled.value) return false
+  if (props.mode === 'always') return true
+  if (props.mode === 'hover') return hovering.value
+  return inView.value
+})
 
 let fx = null
 let resizeObserver = null
 let themeObserver = null
 let contentObserver = null
+let intersectionObserver = null
 let snapshotTimer = 0
 let still = false
 let lastSize = ''
@@ -168,6 +174,19 @@ onMounted(async () => {
       characterData: true
     })
   }
+
+  // "只要能看到就激活点阵"：用 IntersectionObserver 盯着元素有没有出现在视口里。
+  // threshold 为 0 表示哪怕只露出一点也算可见；滚出去就切回普通显示，
+  // active 的变化会顺带把渲染循环暂停掉（见下面的 watch）。
+  if (props.mode === 'visible') {
+    intersectionObserver = new IntersectionObserver(
+      (entries) => {
+        inView.value = entries[0].isIntersecting
+      },
+      { threshold: 0 }
+    )
+    intersectionObserver.observe(rootEl.value)
+  }
 })
 
 onBeforeUnmount(() => {
@@ -179,6 +198,7 @@ onBeforeUnmount(() => {
   if (resizeObserver) resizeObserver.disconnect()
   if (themeObserver) themeObserver.disconnect()
   if (contentObserver) contentObserver.disconnect()
+  if (intersectionObserver) intersectionObserver.disconnect()
 })
 </script>
 

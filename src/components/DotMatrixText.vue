@@ -37,6 +37,7 @@ const canvasEl = ref(null)
 let fx = null
 let resizeObserver = null
 let themeObserver = null
+let intersectionObserver = null
 let still = false // 是否需要保持静止（用户关闭了动画效果）
 
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -176,6 +177,18 @@ onMounted(() => {
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(() => render())
   }
+
+  // 只要能看到才跑动画：滚出视口就暂停渲染循环，不在看不见的地方空转
+  if (fx && !still) {
+    intersectionObserver = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) fx.start()
+        else fx.pause()
+      },
+      { threshold: 0 }
+    )
+    intersectionObserver.observe(hostEl.value)
+  }
 })
 
 onBeforeUnmount(() => {
@@ -185,6 +198,7 @@ onBeforeUnmount(() => {
   }
   if (resizeObserver) resizeObserver.disconnect()
   if (themeObserver) themeObserver.disconnect()
+  if (intersectionObserver) intersectionObserver.disconnect()
 })
 </script>
 

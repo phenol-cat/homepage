@@ -211,37 +211,42 @@ body { margin: 0; padding: 0; overflow: hidden; font-family: var(--font-sans); }
 }
 
 /* 收起 / 展开按钮：贴在侧边栏右侧中线上的一个折线小把手。
-   风格参照欢迎页 —— 一层薄薄的玻璃底 + 一条细折线，不用实心圆按钮。
+   配色和质感直接对齐欢迎页的「进入主页」按钮：
+   半透明黑底 + 模糊 + 白色折线 + 淡白描边，悬停时翻成纯白底黑折线并放大。
    位置固定在右边缘，侧边栏宽度变化时它会跟着边缘一起平移。 */
 .sidebar-toggle {
   position: absolute;
   top: 50%; right: 0;
   z-index: 5;
-  width: 22px; height: 52px;
+  width: 24px; height: 56px;
   display: flex; align-items: center; justify-content: center;
   padding: 0 2px 0 0;
-  /* 左半边是圆角、右边贴着边缘，看起来像嵌在侧边栏上的小把手 */
-  border-radius: 11px 0 0 11px;
-  border: 1px solid var(--glass-border);
-  border-right: none;
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  color: var(--text-secondary);
+  /* 左侧全圆角、右侧贴着边缘，像嵌在侧边栏上的把手 */
+  border-radius: 50px 0 0 50px;
+
+  /* ↓ 以下照搬欢迎页 .enter-btn 的质感 */
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+
   cursor: pointer;
   /* 垂直居中：位移写在这里，不要另外再写一条规则去覆盖 */
   transform: translateY(-50%);
-  transition: transform 0.25s ease, opacity 0.35s ease,
-              background-color 0.25s ease, border-color 0.25s ease,
-              color 0.25s ease, box-shadow 0.25s ease;
+  transition: all 0.3s ease;
 }
 .sidebar-toggle:hover {
-  color: var(--text-primary);
-  /* 轻微的发光，和欢迎页按钮悬停时的质感呼应 */
-  box-shadow: -2px 0 18px rgba(255, 255, 255, 0.28);
+  /* 悬停时和欢迎页按钮一样：变成实心白底黑字，并轻微放大 */
+  background: white;
+  color: black;
+  border-color: white;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transform: translateY(-50%) scale(1.05);
 }
 .sidebar-toggle:active {
-  transform: translateY(-50%) scale(0.94);
+  transform: translateY(-50%) scale(0.95);
 }
 
 /* 沉浸模式下把手也退场。

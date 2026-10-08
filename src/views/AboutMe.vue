@@ -1,21 +1,12 @@
 <script setup>
   import SvgIcon from '../components/SvgIcon.vue'
-  import DotMatrixText from '../components/DotMatrixText.vue'
 </script>
 
 <template>
   <div class="about-content-area">
       
     <header class="header-section">
-      <h1 class="name">
-        <!-- 点阵字：把标题采样成点阵，鼠标划过时附近的点会被吸到光标周围形成磁环 -->
-        <DotMatrixText
-          text="你好，我是三硝基猫猫酚！"
-          :dot-rows="14"
-          :dot-size="0.78"
-          :ring-r="54"
-        />
-      </h1>
+      <h1 class="name">你好，我是三硝基猫猫酚！</h1>
     </header>
 
     <article class="article-body">
@@ -111,19 +102,11 @@
 }
 
 .name {
-  /* 字号 / 字重 / 字间距会被 DotMatrixText 读取，用来绘制点阵字 */
-  font-size: 2.5rem;
+  font-size: 2.5rem; /* 字体稍微加大一点 */
   color: var(--text-primary);
   margin: 0 0 15px 0;
   font-weight: 700;
   letter-spacing: 1px;
-  /* 高度要给鼠标磁环留出上下空间，否则圆环会被裁掉 */
-  height: 150px;
-}
-
-/* 手机端标题会变小，容器高度同步收一点，保持留白比例 */
-@media (max-width: 900px) {
-  .name { font-size: 1.6rem; height: 120px; }
 }
 
 .university {

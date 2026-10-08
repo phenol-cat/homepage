@@ -1,9 +1,12 @@
 <script setup>
   import SvgIcon from './SvgIcon.vue'
 
-  // 定义 props：接收当前选中的是哪个 tab，以及一个切换函数
+  // 定义 props：
+  // activeTab 当前选中的 tab
+  // collapsed 收起模式：只显示图标，隐藏文字（用于侧边栏收起后的窄轨）
   defineProps({
-    activeTab: String
+    activeTab: String,
+    collapsed: { type: Boolean, default: false }
   })
   
   // 定义事件：告诉父组件“我被点击了”
@@ -18,17 +21,19 @@
 </script>
 
 <template>
-  <nav class="menu-list">
+  <nav class="menu-list" :class="{ 'menu-list--compact': collapsed }">
     <button 
       v-for="item in menuItems" 
       :key="item.id"
       type="button"
       :class="{ active: activeTab === item.id }"
       :aria-current="activeTab === item.id ? 'page' : undefined"
+      :aria-label="item.label"
+      :title="collapsed ? item.label : undefined"
       @click="emit('change-tab', item.id)"
     >
       <SvgIcon :name="item.icon" :size="18" />
-      <span class="label">{{ item.label }}</span>
+      <span v-if="!collapsed" class="label">{{ item.label }}</span>
     </button>
   </nav>
 </template>
@@ -70,6 +75,23 @@ button {
 }
 
 .label { line-height: 1; }
+
+/* --- 收起模式：只剩图标，按钮变成居中的方块 --- */
+.menu-list--compact {
+  background: transparent;
+  padding: 0;
+  gap: 8px;
+  /* 视觉上贴着背景，不需要玻璃底板 */
+}
+
+.menu-list--compact button {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  margin: 0 auto;
+  justify-content: center;
+  border-radius: 12px;
+}
 
 button:hover {
   /* 原来用的是和菜单容器同样的背景色，悬停时几乎看不出变化 */

@@ -108,6 +108,16 @@ defineProps({
       <polyline points="12 19 5 12 12 5" />
     </template>
 
+    <!-- 向左收起 -->
+    <template v-else-if="name === 'chevron-left'">
+      <polyline points="15 18 9 12 15 6" />
+    </template>
+
+    <!-- 向右展开 -->
+    <template v-else-if="name === 'chevron-right'">
+      <polyline points="9 18 15 12 9 6" />
+    </template>
+
     <!-- 日期 -->
     <template v-else-if="name === 'calendar'">
       <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />

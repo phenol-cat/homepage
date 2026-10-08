@@ -298,6 +298,19 @@ button:focus:not(:focus-visible) {
   color: var(--text-primary);
 }
 
+/* 视觉隐藏但仍然能被读屏软件读到的内容（点阵字等纯装饰性渲染时要用） */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* 尊重系统的"减少动态效果"设置 */
 @media (prefers-reduced-motion: reduce) {
   *,

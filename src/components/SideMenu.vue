@@ -76,12 +76,15 @@ button {
 
 .label { line-height: 1; }
 
-/* --- 收起模式：只剩图标，按钮变成居中的方块 --- */
+/* --- 收起模式：保留磨砂底，只把文字去掉、让图标居中 ---
+   底色 / 边框沿用 .menu-list 原本的玻璃变量，收起后依然是一块磨砂面板，
+   只是内容从"图标 + 文字"变成"只有图标"。 */
 .menu-list--compact {
-  background: transparent;
-  padding: 0;
+  /* 撑满窄轨宽度：父容器是 align-items:center 的列布局，
+     不写宽度的话面板会缩成刚好包住按钮，比上面的头像卡片窄一截 */
+  width: 100%;
+  padding: 12px 0;
   gap: 8px;
-  /* 视觉上贴着背景，不需要玻璃底板 */
 }
 
 .menu-list--compact button {

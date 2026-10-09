@@ -128,7 +128,10 @@
 
         <div class="sidebar-layer sidebar-layer--rail">
           <div class="sidebar-layer-inner hide-in-zen">
-            <img class="rail-avatar" :src="myAvatar" alt="头像" />
+            <!-- 头像外面保留一块磨砂底，和展开态的个人卡片呼应 -->
+            <div class="rail-avatar-card">
+              <img class="rail-avatar" :src="myAvatar" alt="头像" />
+            </div>
             <SideMenu collapsed :active-tab="currentTabId" @change-tab="switchTab" />
           </div>
         </div>
@@ -297,7 +300,8 @@ body { margin: 0; padding: 0; overflow: hidden; font-family: var(--font-sans); }
 
 /* 窄轨层：只留头像和图标菜单 */
 .sidebar-layer--rail {
-  width: calc(var(--sidebar-collapsed) - 24px);
+  /* 侧边栏内容宽 - 24px：右边那 24px 留给把手，避免面板被把手压住 */
+  width: calc(var(--sidebar-collapsed) - 48px);
   opacity: 0;
   visibility: hidden;
   transform: translateX(12px);
@@ -311,7 +315,20 @@ body { margin: 0; padding: 0; overflow: hidden; font-family: var(--font-sans); }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 22px;
+  gap: 18px;
+}
+
+/* 收起后的头像：单独一块磨砂底，取代展开态那张个人名片 */
+.rail-avatar-card {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  padding: 12px 0;
+  border-radius: 12px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 4px 6px var(--glass-shadow);
 }
 
 .rail-avatar {
@@ -320,7 +337,6 @@ body { margin: 0; padding: 0; overflow: hidden; font-family: var(--font-sans); }
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid var(--glass-border);
-  box-shadow: 0 4px 14px var(--glass-shadow);
 }
 
 /* --- 收起状态 --- */

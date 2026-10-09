@@ -78,18 +78,23 @@ button {
 
 /* --- 收起模式：保留磨砂底，只把文字去掉、让图标居中 ---
    底色 / 边框沿用 .menu-list 原本的玻璃变量，收起后依然是一块磨砂面板，
-   只是内容从"图标 + 文字"变成"只有图标"。 */
+   只是内容从"图标 + 文字"变成"只有图标"。
+   尺寸用父级量出来的展开态数值（CSS 变量），保证收起前后上下完全对齐。 */
 .menu-list--compact {
   /* 撑满窄轨宽度：父容器是 align-items:center 的列布局，
      不写宽度的话面板会缩成刚好包住按钮，比上面的头像卡片窄一截 */
   width: 100%;
-  padding: 12px 0;
-  gap: 8px;
+  /* 间距改由父容器的 gap 控制；这里若留着基础样式的 margin-top: 20px，
+     总高会超出可用空间，flex 会把面板压扁，收起前后就对不齐了 */
+  margin-top: 0;
+  flex: none;
+  padding: var(--rail-menu-pad, 15px) 0;
+  gap: var(--rail-menu-gap, 10px);
 }
 
 .menu-list--compact button {
-  width: 44px;
-  height: 44px;
+  width: var(--rail-btn-h, 44px);
+  height: var(--rail-btn-h, 44px);
   padding: 0;
   margin: 0 auto;
   justify-content: center;

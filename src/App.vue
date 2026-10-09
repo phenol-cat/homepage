@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, shallowRef } from 'vue'
+  import { ref, shallowRef, onMounted } from 'vue'
   
   // 组件导入
   import UserProfile from './components/UserProfile.vue'
@@ -71,6 +71,49 @@
   const showBackTop = ref(false)
   function handleScroll(e) { showBackTop.value = e.target.scrollTop > 300 }
   function scrollToTop() { scrollRef.value.scrollTo({ top: 0, behavior: 'smooth' }) }
+
+  /* --- 收起时对齐展开态 ---
+     收起只是"横向压窄"，所以窄轨里每一块的上下尺寸和间距都要跟展开态一致，
+     否则收起瞬间整列元素会往上跳。这里直接量展开态的真实尺寸（简介换几行、
+     字号多大都会影响高度），再用 CSS 变量传给窄轨，避免把数字写死。 */
+  const profileAreaEl = ref(null)
+  const menuAreaEl = ref(null)
+  const railVars = ref({
+    cardH: 'auto',
+    gap: '0px',
+    btnH: '44px',
+    menuPad: '15px',
+    menuGap: '10px'
+  })
+
+  function measureRail() {
+    const card = profileAreaEl.value && profileAreaEl.value.querySelector('.profile-card')
+    const menu = menuAreaEl.value && menuAreaEl.value.querySelector('.menu-list')
+    if (!card || !menu) return
+
+    const cardRect = card.getBoundingClientRect()
+    const menuRect = menu.getBoundingClientRect()
+    const menuStyle = getComputedStyle(menu)
+    const firstBtn = menu.querySelector('button')
+
+    railVars.value = {
+      cardH: Math.round(cardRect.height) + 'px',
+      gap: Math.round(menuRect.top - cardRect.bottom) + 'px',
+      btnH: firstBtn ? Math.round(firstBtn.getBoundingClientRect().height) + 'px' : '44px',
+      menuPad: (parseFloat(menuStyle.paddingTop) || 0) + 'px',
+      menuGap: (parseFloat(menuStyle.rowGap) || 0) + 'px'
+    }
+  }
+
+  onMounted(() => {
+    measureRail()
+    // 字号、简介换行变化都会影响高度，重新量一次
+    if (window.ResizeObserver && menuAreaEl.value) {
+      const ro = new ResizeObserver(() => measureRail())
+      ro.observe(menuAreaEl.value)
+      ro.observe(profileAreaEl.value)
+    }
+  })
 </script>
 
 <template>
@@ -116,18 +159,27 @@
       <div class="sidebar-stack">
         <div class="sidebar-layer sidebar-layer--full">
           <div class="sidebar-layer-inner hide-in-zen">
-            <div class="profile-area">
+            <div class="profile-area" ref="profileAreaEl">
               <UserProfile :name="myName" :bio="myBio" :avatar="myAvatar" />
             </div>
 
-            <div class="menu-area">
+            <div class="menu-area" ref="menuAreaEl">
               <SideMenu :active-tab="currentTabId" @change-tab="switchTab" />
             </div>
           </div>
         </div>
 
         <div class="sidebar-layer sidebar-layer--rail">
-          <div class="sidebar-layer-inner hide-in-zen">
+          <div
+            class="sidebar-layer-inner hide-in-zen"
+            :style="{
+              gap: railVars.gap,
+              '--rail-card-h': railVars.cardH,
+              '--rail-btn-h': railVars.btnH,
+              '--rail-menu-pad': railVars.menuPad,
+              '--rail-menu-gap': railVars.menuGap
+            }"
+          >
             <!-- 头像外面保留一块磨砂底，和展开态的个人卡片呼应 -->
             <div class="rail-avatar-card">
               <img class="rail-avatar" :src="myAvatar" alt="头像" />
@@ -323,7 +375,11 @@ body { margin: 0; padding: 0; overflow: hidden; font-family: var(--font-sans); }
 .rail-avatar-card {
   width: 100%;
   box-sizing: border-box;
+  /* 高度对齐展开态的个人卡片，收起时这块不会变矮 */
+  height: var(--rail-card-h, auto);
+  flex: none;
   display: flex;
+  align-items: center;
   justify-content: center;
   padding: 12px 0;
   border-radius: 12px;

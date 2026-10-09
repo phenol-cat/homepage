@@ -386,6 +386,16 @@ body { margin: 0; padding: 0; overflow: hidden; font-family: var(--font-sans); }
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   box-shadow: 0 4px 6px var(--glass-shadow);
+  transition: opacity 0.25s ease, visibility 0s linear 0s;
+}
+
+/* 收起后不再显示 UserProfile：这一块整块隐藏。
+   高度仍然保留（用 visibility 而不是 display），
+   这样下面的图标面板还停在原来的位置，收起前后依然严格对齐。 */
+.viewport-container.sidebar-collapsed .rail-avatar-card {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0s linear 0.25s;
 }
 
 .rail-avatar {
@@ -455,17 +465,40 @@ body { margin: 0; padding: 0; overflow: hidden; font-family: var(--font-sans); }
 }
 
 /* 收起后：按钮缩小让两个并排塞进窄轨，底部文字淡出（保留占位，避免跳动） */
-.footer-copy { transition: opacity 0.3s ease; }
+.footer-copy {
+  max-height: 200px;
+  transition: opacity 0.3s ease, max-height 0.35s ease, margin 0.35s ease;
+}
 
-.viewport-container.sidebar-collapsed .button-group { gap: 10px; }
+.viewport-container.sidebar-collapsed .button-group {
+  /* 收起后窄轨只有 64px 宽，横向并排会顶到右侧把手，
+     所以改成竖排；宽度和上方图标面板对齐 */
+  flex-direction: column;
+  gap: 8px;
+}
 
 .viewport-container.sidebar-collapsed :deep(.theme-btn),
 .viewport-container.sidebar-collapsed :deep(.zen-btn) {
-  width: 38px;
-  height: 38px;
+  /* 和图标面板里的按钮同尺寸，视觉上是一列 */
+  width: 42px;
+  height: 42px;
 }
 
-.viewport-container.sidebar-collapsed .footer-copy { opacity: 0; }
+/* 收起后底部区右边留出把手的宽度，让按钮列的轴线和图标面板一致 */
+.viewport-container.sidebar-collapsed .footer-area {
+  padding-right: 24px;
+  gap: 0;
+}
+
+/* 版权文字收起后不只是透明：它在 88px 宽里会折成好几行、
+   白占 70 多像素高度，所以连高度一起去掉，给上面的内容让出空间 */
+.viewport-container.sidebar-collapsed .footer-copy {
+  opacity: 0;
+  /* 用 max-height 而不是 height：height:auto 过渡不了，会硬跳 */
+  max-height: 0;
+  margin: 0;
+  overflow: hidden;
+}
 
 /* =========================================
    3. 动画与内容区
@@ -567,8 +600,17 @@ body { margin: 0; padding: 0; overflow: hidden; font-family: var(--font-sans); }
 
   /* 手机端不支持收起，但收起状态可能已经被记住（localStorage），
      所以这里要把收起造成的影响一并还原，否则底部版权会莫名消失、按钮会变小 */
-  .viewport-container.sidebar-collapsed .footer-copy { opacity: 1; }
-  .viewport-container.sidebar-collapsed .button-group { gap: 20px; }
+  .viewport-container.sidebar-collapsed .footer-area { padding-right: 0; gap: 15px; }
+  .viewport-container.sidebar-collapsed .footer-copy {
+    opacity: 1;
+    max-height: 200px;
+    margin-top: 5px;
+    overflow: visible;
+  }
+  .viewport-container.sidebar-collapsed .button-group {
+    flex-direction: row;
+    gap: 20px;
+  }
   .viewport-container.sidebar-collapsed :deep(.theme-btn),
   .viewport-container.sidebar-collapsed :deep(.zen-btn) {
     width: 50px;

@@ -104,7 +104,7 @@
       >
         <SvgIcon
           :name="isCollapsed ? 'chevron-right' : 'chevron-left'"
-          :size="20"
+          :size="22"
           :stroke-width="1.6"
         />
       </button>
@@ -214,18 +214,19 @@ body { margin: 0; padding: 0; overflow: hidden; font-family: var(--font-sans); }
 }
 
 /* 收起 / 展开按钮：贴在侧边栏右侧中线上的一个折线小把手。
-   配色和质感直接对齐欢迎页的「进入主页」按钮：
+   形状和质感都对齐欢迎页的「进入主页」按钮 —— 完整胶囊形（四角都是大圆角），
    半透明黑底 + 模糊 + 白色折线 + 淡白描边，悬停时翻成纯白底黑折线并放大。
    位置固定在右边缘，侧边栏宽度变化时它会跟着边缘一起平移。 */
 .sidebar-toggle {
   position: absolute;
-  top: 50%; right: 0;
+  /* 留一点缝，让它看起来是一颗浮着的胶囊，而不是贴在边上的半圆 */
+  top: 50%; right: 2px;
   z-index: 5;
-  width: 24px; height: 56px;
+  width: 26px; height: 64px;
   display: flex; align-items: center; justify-content: center;
-  padding: 0 2px 0 0;
-  /* 左侧全圆角、右侧贴着边缘，像嵌在侧边栏上的把手 */
-  border-radius: 50px 0 0 50px;
+  padding: 0;
+  /* 四角同半径 → 完整胶囊，和欢迎页按钮的 borderRadius: 50px 一致 */
+  border-radius: 50px;
 
   /* ↓ 以下照搬欢迎页 .enter-btn 的质感 */
   background: rgba(0, 0, 0, 0.4);
